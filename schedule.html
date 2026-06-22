@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Available Classes | Apex CPR Training</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#d62828;
+    --dark:#0f172a;
+    --light:#f8fafc;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:var(--light);
+    color:#111827;
+}
+
+.container{
+    width:min(1100px,90%);
+    margin:auto;
+}
+
+nav{
+    background:white;
+    padding:20px 0;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.logo{
+    font-size:1.6rem;
+    font-weight:800;
+    color:var(--primary);
+}
+
+.hero{
+    background:linear-gradient(rgba(15,23,42,.8),rgba(15,23,42,.8)),
+    url("images/hero.jpg");
+    background-size:cover;
+    background-position:center;
+    color:white;
+    text-align:center;
+    padding:100px 20px;
+}
+
+.hero h1{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+section{
+    padding:80px 0;
+}
+
+.schedule-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.date-card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+
+.date-card h2{
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+.date-card p{
+    margin-bottom:10px;
+}
+
+.email-btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:14px 22px;
+    background:var(--primary);
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:600;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:30px;
+    color:var(--primary);
+    text-decoration:none;
+    font-weight:700;
+}
+
+footer{
+    background:#020617;
+    color:#94a3b8;
+    text-align:center;
+    padding:25px;
+}
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<div class="container">
+<div class="logo">Apex CPR Training</div>
+</div>
+</nav>
+
+<div class="hero">
+<h1>Available Class Dates</h1>
+<p>Select a session below to reserve your spot.</p>
+</div>
+
+<section>
+<div class="container">
+
+<div class="schedule-grid">
+
+<!-- CARD 1 -->
+<div class="date-card">
+<h2>July 6</h2>
+<p><strong>Time:</strong> 6:00 PM - 8:00 PM</p>
+<p><strong>Location:</strong> Claymont Community Center</p>
+
+<a class="email-btn"
+href="reserve.html?class=BLS%20Certification&date=July%206%206:00PM-8:00PM">
+Reserve Spot
+</a>
+</div>
+
+<!-- CARD 2 -->
+<div class="date-card">
+<h2>July 7</h2>
+<p><strong>Time:</strong> 6:00 PM - 8:00 PM</p>
+<p><strong>Location:</strong> Claymont Community Center</p>
+
+<a class="email-btn"
+href="reserve.html?class=BLS%20Certification&date=July%207%206:00PM-8:00PM">
+Reserve Spot
+</a>
+</div>
+
+<!-- CARD 3 -->
+<div class="date-card">
+<h2>July 18</h2>
+<p><strong>Time:</strong> 10:00 AM - 12:00 PM</p>
+<p><strong>Location:</strong> Claymont Community Center</p>
+
+<a class="email-btn"
+href="reserve.html?class=Heartsaver&date=July%2018%2010:00AM-12:00PM">
+Reserve Spot
+</a>
+</div>
+
+</div>
+
+<a href="index.html" class="back-btn">← Back to Homepage</a>
+
+</div>
+</section>
+
+<footer>
+© 2026 Apex CPR Training
+</footer>
+
+</body>
+</html>
