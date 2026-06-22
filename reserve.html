@@ -48,14 +48,17 @@ button{
 
 <h2>Reserve Your Spot</h2>
 
-<form action="https://formsubmit.co/Apex.CPR.Training1@gmail.com" method="POST">
-
+<form action="https://formsubmit.co/Apex.CPR.Training1@gmail.com" method="POST">\
+    
+    <input type="hidden" name="_token" value="754f3233f45d27d3ab4ce96e341073ee">
+    <input type="hidden" name="_captcha" value="false">
     <input type="text" name="name" placeholder="Full Name" required>
     <input type="email" name="email" placeholder="Email" required>
     <input type="tel" name="phone" placeholder="Phone Number" required>
 
     <input type="text" id="classField" name="class" readonly>
     <input type="text" id="dateField" name="date" readonly>
+    
 
     <button type="submit">Reserve Spot</button>
 
