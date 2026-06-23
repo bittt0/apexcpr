@@ -130,45 +130,7 @@ footer{
 <section>
 <div class="container">
 
-<div class="schedule-grid">
-
-<!-- CARD 1 -->
-<div class="date-card">
-<h2>July 6</h2>
-<p><strong>Time:</strong> 6:00 PM - 8:00 PM</p>
-<p><strong>Location:</strong> Claymont Community Center</p>
-
-<a class="email-btn"
-href="reserve.html?class=BLS%20Certification&date=July%206%206:00PM-8:00PM">
-Reserve Spot
-</a>
-</div>
-
-<!-- CARD 2 -->
-<div class="date-card">
-<h2>July 7</h2>
-<p><strong>Time:</strong> 6:00 PM - 8:00 PM</p>
-<p><strong>Location:</strong> Claymont Community Center</p>
-
-<a class="email-btn"
-href="reserve.html?class=BLS%20Certification&date=July%207%206:00PM-8:00PM">
-Reserve Spot
-</a>
-</div>
-
-<!-- CARD 3 -->
-<div class="date-card">
-<h2>July 18</h2>
-<p><strong>Time:</strong> 10:00 AM - 12:00 PM</p>
-<p><strong>Location:</strong> Claymont Community Center</p>
-
-<a class="email-btn"
-href="reserve.html?class=Heartsaver&date=July%2018%2010:00AM-12:00PM">
-Reserve Spot
-</a>
-</div>
-
-</div>
+<div id="schedule" class="schedule-grid"></div>
 
 <a href="index.html" class="back-btn">← Back to Homepage</a>
 
@@ -178,6 +140,48 @@ Reserve Spot
 <footer>
 © 2026 Apex CPR Training
 </footer>
+
+<script>
+const SHEET_URL = "YOUR_PUBLISHED_CSV_LINK_HERE";
+
+async function loadSchedule() {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+
+    const rows = text.trim().split("\n").slice(1);
+
+    const data = rows.map(row => {
+        const [title, date, time, location, classType] = row.split(",");
+
+        return { title, date, time, location, classType };
+    });
+
+    renderSchedule(data);
+}
+
+function renderSchedule(data) {
+    const container = document.getElementById("schedule");
+
+    container.innerHTML = data.map(item => {
+        const query = encodeURIComponent(`${item.classType} ${item.date} ${item.time}`);
+
+        return `
+        <div class="date-card">
+            <h2>${item.date}</h2>
+            <p><strong>Time:</strong> ${item.time}</p>
+            <p><strong>Location:</strong> ${item.location}</p>
+
+            <a class="email-btn"
+               href="reserve.html?class=${encodeURIComponent(item.classType)}&date=${query}">
+               Reserve Spot
+            </a>
+        </div>
+        `;
+    }).join("");
+}
+
+loadSchedule();
+</script>
 
 </body>
 </html>
