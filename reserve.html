@@ -18,7 +18,7 @@ body{
 .box{
     background:white;
     padding:30px;
-    width:380px;
+    width:400px;
     border-radius:12px;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
@@ -39,12 +39,6 @@ button{
     cursor:pointer;
     font-weight:bold;
 }
-
-small{
-    display:block;
-    margin-top:10px;
-    color:#666;
-}
 </style>
 </head>
 
@@ -55,27 +49,20 @@ small{
 <h2>Reserve Your Spot</h2>
 
 <form action="https://formsubmit.co/Apex.CPR.Training1@gmail.com" method="POST">
+<input type="hidden" name="_captcha" value="false">
 
-    <input type="hidden" name="_captcha" value="false">
+<input type="text" name="name" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="tel" name="phone" placeholder="Phone Number" required>
 
-    <input type="text" name="name" placeholder="Full Name" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="tel" name="phone" placeholder="Phone Number" required>
+<select id="sessions"></select>
 
-    <!-- NEW: class selector -->
-    <select id="sessionSelect" required>
-        <option value="">Loading available classes...</option>
-    </select>
+<input type="text" name="class" id="classField" readonly>
+<input type="text" name="date" id="dateField" readonly>
+<input type="text" name="time" id="timeField" readonly>
+<input type="text" name="location" id="locationField" readonly>
 
-    <input type="text" id="classField" name="class" readonly>
-    <input type="text" id="dateField" name="date" readonly>
-    <input type="text" id="timeField" name="time" readonly>
-    <input type="text" id="locationField" name="location" readonly>
-
-    <button type="submit">Reserve Spot</button>
-
-    <small>Select a class session above to auto-fill details.</small>
-
+<button type="submit">Reserve Spot</button>
 </form>
 
 </div>
@@ -84,47 +71,47 @@ small{
 
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQH3XpNss-hIonvF_8GJ5c_ORTS33tCCQFfsPwyWnmdKAm_p0V0e4NlDgiGbmduXXc6RM2uG9FpnboF/pub?output=csv";
 
-let scheduleData = [];
+let data = [];
 
-async function loadSchedule() {
-    const res = await fetch(SHEET_URL);
+async function load() {
+    const res = await fetch(SHEET_URL, { cache: "no-store" });
     const text = await res.text();
 
     const rows = text.trim().split("\n").slice(1);
 
-    scheduleData = rows.map(row => {
-        const [title, date, time, location, classType] = row.split(",");
-        return { title, date, time, location, classType };
+    data = rows.map(r => {
+        const c = r.split(",").map(v => v.replace(/"/g,'').trim());
+        return {
+            classType: c[0],
+            date: c[1],
+            time: c[2],
+            location: c[3]
+        };
     });
 
-    populateDropdown();
-}
+    const select = document.getElementById("sessions");
 
-function populateDropdown() {
-    const select = document.getElementById("sessionSelect");
+    select.innerHTML = "<option value=''>Select a session</option>";
 
-    select.innerHTML = `<option value="">Select a class session</option>`;
-
-    scheduleData.forEach((item, index) => {
-        const option = document.createElement("option");
-        option.value = index;
-        option.textContent = `${item.classType} — ${item.date} (${item.time})`;
-        select.appendChild(option);
+    data.forEach((d,i)=>{
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = `${d.classType} — ${d.date} (${d.time})`;
+        select.appendChild(opt);
     });
 }
 
-document.getElementById("sessionSelect").addEventListener("change", function() {
-    const item = scheduleData[this.value];
+document.getElementById("sessions").addEventListener("change", function(){
+    const d = data[this.value];
+    if(!d) return;
 
-    if (!item) return;
-
-    document.getElementById("classField").value = item.classType;
-    document.getElementById("dateField").value = item.date;
-    document.getElementById("timeField").value = item.time;
-    document.getElementById("locationField").value = item.location;
+    document.getElementById("classField").value = d.classType;
+    document.getElementById("dateField").value = d.date;
+    document.getElementById("timeField").value = d.time;
+    document.getElementById("locationField").value = d.location;
 });
 
-loadSchedule();
+load();
 
 </script>
 
