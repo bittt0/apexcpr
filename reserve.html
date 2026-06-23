@@ -5,39 +5,116 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reserve Spot | Apex CPR Training</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
+:root{
+    --primary:#d62828;
+    --bg:#f1f5f9;
+    --text:#0f172a;
+    --muted:#64748b;
+    --card:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
-    font-family:Arial;
-    background:#f4f4f4;
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
+    padding:20px;
 }
 
+/* CARD */
 .box{
-    background:white;
-    padding:30px;
-    width:400px;
-    border-radius:12px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    background:var(--card);
+    width:100%;
+    max-width:420px;
+    padding:32px;
+    border-radius:16px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.12);
+}
+
+/* TITLE */
+h2{
+    font-size:1.6rem;
+    margin-bottom:6px;
+}
+
+.subtitle{
+    color:var(--muted);
+    font-size:0.9rem;
+    margin-bottom:18px;
+}
+
+/* FORM */
+form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
 }
 
 input, select{
     width:100%;
-    padding:10px;
-    margin-top:10px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid #e2e8f0;
+    font-size:0.95rem;
+    outline:none;
+    transition:0.2s;
+    background:white;
 }
 
+input:focus, select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(214,40,40,0.12);
+}
+
+/* READONLY FIELDS */
+.readonly{
+    background:#f8fafc;
+    color:#475569;
+}
+
+/* BUTTON */
 button{
-    width:100%;
+    margin-top:8px;
     padding:12px;
-    margin-top:15px;
-    background:#d62828;
+    background:var(--primary);
     color:white;
     border:none;
+    border-radius:10px;
+    font-weight:600;
     cursor:pointer;
-    font-weight:bold;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+    opacity:0.95;
+}
+
+/* SMALL TEXT */
+small{
+    color:var(--muted);
+    margin-top:6px;
+    text-align:center;
+}
+
+/* MOBILE TWEAK */
+@media (max-width:480px){
+    .box{
+        padding:24px;
+    }
 }
 </style>
 </head>
@@ -47,6 +124,7 @@ button{
 <div class="box">
 
 <h2>Reserve Your Spot</h2>
+<p class="subtitle">Select a class session and enter your details</p>
 
 <form action="https://formsubmit.co/Apex.CPR.Training1@gmail.com" method="POST">
 <input type="hidden" name="_captcha" value="false">
@@ -55,14 +133,18 @@ button{
 <input type="email" name="email" placeholder="Email" required>
 <input type="tel" name="phone" placeholder="Phone Number" required>
 
-<select id="sessions"></select>
+<select id="sessions" required>
+    <option value="">Loading available sessions...</option>
+</select>
 
-<input type="text" name="class" id="classField" readonly>
-<input type="text" name="date" id="dateField" readonly>
-<input type="text" name="time" id="timeField" readonly>
-<input type="text" name="location" id="locationField" readonly>
+<input class="readonly" type="text" name="class" id="classField" readonly placeholder="Class">
+<input class="readonly" type="text" name="date" id="dateField" readonly placeholder="Date">
+<input class="readonly" type="text" name="time" id="timeField" readonly placeholder="Time">
+<input class="readonly" type="text" name="location" id="locationField" readonly placeholder="Location">
 
 <button type="submit">Reserve Spot</button>
+
+<small>All sessions are confirmed by email after submission</small>
 </form>
 
 </div>
@@ -90,8 +172,7 @@ async function load() {
     });
 
     const select = document.getElementById("sessions");
-
-    select.innerHTML = "<option value=''>Select a session</option>";
+    select.innerHTML = `<option value="">Select a session</option>`;
 
     data.forEach((d,i)=>{
         const opt = document.createElement("option");
