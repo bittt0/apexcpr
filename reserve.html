@@ -18,12 +18,12 @@ body{
 .box{
     background:white;
     padding:30px;
-    width:360px;
+    width:380px;
     border-radius:12px;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
-input{
+input, select{
     width:100%;
     padding:10px;
     margin-top:10px;
@@ -39,6 +39,12 @@ button{
     cursor:pointer;
     font-weight:bold;
 }
+
+small{
+    display:block;
+    margin-top:10px;
+    color:#666;
+}
 </style>
 </head>
 
@@ -49,28 +55,77 @@ button{
 <h2>Reserve Your Spot</h2>
 
 <form action="https://formsubmit.co/Apex.CPR.Training1@gmail.com" method="POST">
-    
-    <input type="hidden" name="_token" value="754f3233f45d27d3ab4ce96e341073ee">
+
     <input type="hidden" name="_captcha" value="false">
+
     <input type="text" name="name" placeholder="Full Name" required>
     <input type="email" name="email" placeholder="Email" required>
     <input type="tel" name="phone" placeholder="Phone Number" required>
 
+    <!-- NEW: class selector -->
+    <select id="sessionSelect" required>
+        <option value="">Loading available classes...</option>
+    </select>
+
     <input type="text" id="classField" name="class" readonly>
     <input type="text" id="dateField" name="date" readonly>
-    
+    <input type="text" id="timeField" name="time" readonly>
+    <input type="text" id="locationField" name="location" readonly>
 
     <button type="submit">Reserve Spot</button>
+
+    <small>Select a class session above to auto-fill details.</small>
 
 </form>
 
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
 
-document.getElementById("classField").value = params.get("class") || "Not selected";
-document.getElementById("dateField").value = params.get("date") || "Not selected";
+const SHEET_URL = "YOUR_PUBLISHED_CSV_LINK_HERE";
+
+let scheduleData = [];
+
+async function loadSchedule() {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+
+    const rows = text.trim().split("\n").slice(1);
+
+    scheduleData = rows.map(row => {
+        const [title, date, time, location, classType] = row.split(",");
+        return { title, date, time, location, classType };
+    });
+
+    populateDropdown();
+}
+
+function populateDropdown() {
+    const select = document.getElementById("sessionSelect");
+
+    select.innerHTML = `<option value="">Select a class session</option>`;
+
+    scheduleData.forEach((item, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = `${item.classType} — ${item.date} (${item.time})`;
+        select.appendChild(option);
+    });
+}
+
+document.getElementById("sessionSelect").addEventListener("change", function() {
+    const item = scheduleData[this.value];
+
+    if (!item) return;
+
+    document.getElementById("classField").value = item.classType;
+    document.getElementById("dateField").value = item.date;
+    document.getElementById("timeField").value = item.time;
+    document.getElementById("locationField").value = item.location;
+});
+
+loadSchedule();
+
 </script>
 
 </body>
